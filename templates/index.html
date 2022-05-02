@@ -79,7 +79,15 @@
         }
 
         .mybox > li > h2.done {
-            text-decoration: line-through
+            text-decoration: line-through;
+        }
+
+        .mybox > li > h2.cancel {
+            text-decoration: none;
+        }
+
+        .mybox > li > .delete-btn {
+            margin-left: 10px;
         }
     </style>
     <script>
@@ -102,13 +110,16 @@
                         let temp_html = ``
                         if (done == 0) {
                             temp_html = `<li>
-                                            <h2>✅ ${bucket}</h2>
-                                            <button onclick="done_bucket(${num})" type="button" class="btn btn-outline-primary">Done!</
+                                            <h2 class="cancel">✅ ${bucket}</h2>
+                                            <button onclick="done_bucket(${num})" type="button" class="btn btn-outline-primary">Done!</button>
+                                            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-primary delete-btn">Delete!</button>
                                          </li>`}
-                        else {temp_html = `<li>
+                        else {
+                            temp_html = `<li>
                                             <h2 class="done">✅ ${bucket}</h2>
-                                          </li>`
-                        }
+                                            <button onclick="cancel_bucket(${num})" type="button" class="btn btn-outline-primary">Cancel!</button>
+                                            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-primary delete-btn">Delete!</button>
+                                         </li>`}
                         $('#bucket-list').append(temp_html)
                     }
                 }
@@ -139,6 +150,31 @@
                 }
             });
         }
+
+        function cancel_bucket(num) {
+            $.ajax({
+                type: "POST",
+                url: "/bucket/cancel",
+                data: {'num_give': num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
+        function delete_bucket(num) {
+            $.ajax({
+                type: "POST",
+                url: "/bucket/delete",
+                data: {'num_give': num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
     </script>
 </head>
 <body>
